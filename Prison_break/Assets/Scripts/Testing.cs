@@ -11,7 +11,7 @@ public class Testing : MonoBehaviour
     private GridScript gs;
     private void Start()
     {
-        gs = new GridScript(15, 15,5f); 
+        // gs = new GridScript(15, 15,5f); 
     }
 
     private void Update()

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.IO;
 using CodeMonkey.Utils;
 
 public class GridScript
@@ -14,19 +15,13 @@ public class GridScript
 
     //text mesh array for the text within the grid
     private TextMesh[,] debugText;
-    public GridScript(int w, int h, float cs)
+    public GridScript(float cs, string path)
     {
-        width = w;
-        height = h;
         cellSize = cs;
-        //initialize the width and height via constructor params, now create the grid with them
-        gridArray = new int[width, height];
-        debugText = new TextMesh[width, height];
+        loadMapFile(path);
+       
+        
 
-        //Debug.Log(width + " " + height);
-
-        //Giving the map some textures to be seen on the scene. This will then now allow it to be interactable. Since
-        //I need to add some kind of texture to every element, we need a nested loop to modify every tile in the grid.
         for(int i = 0; i < gridArray.GetLength(0);i++)
         {
             for(int j = 0; j < gridArray.GetLength(1);j++)
@@ -55,6 +50,36 @@ public class GridScript
     {
         return new Vector3(x, y) * cellSize;
 
+    }
+    private void loadMapFile(string path){
+        var reader = new StreamReader(File.OpenRead(path));
+        int counter = 0;
+        while(!reader.EndOfStream){
+            var line = reader.ReadLine();
+            var list = line.Split(','); 
+            if(counter == 0){
+                width = int.Parse(list[0]);
+                height = int.Parse(list[1]);
+                //initialize array from file width and height the first entry in the file
+                gridArray = new int[width, height];
+                //Giving the map some textures to be seen on the scene. This will then now allow it to be interactable. Since
+                //I need to add some kind of texture to every element, we need a nested loop to modify every tile in the grid.
+                debugText = new TextMesh[width, height];
+            }else{
+                //the rest of the entries are the types of tiles in the game 1 being wall 0 being walkable and the rest could be doors or items
+                int x = int.Parse(list[0]);
+                int y = int.Parse(list[1]);
+                //checking if out of bounds from grid
+                if(x < width && y < height){
+                    int tileType = int.Parse(list[2]);
+                    gridArray[x,y] = tileType;
+                    Debug.Log(gridArray[x,y]); 
+                }else{
+                    //exit from game since map is incorrect format
+                }
+            }
+            counter++;
+        }
     }
 
 
