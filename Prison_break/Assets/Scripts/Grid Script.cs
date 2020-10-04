@@ -15,6 +15,7 @@ public class GridScript
 
     //text mesh array for the text within the grid
     private TextMesh[,] debugText;
+    private GameObject[,] objects;
     public GridScript(float cs, string path)
     {
         cellSize = cs;
@@ -26,10 +27,14 @@ public class GridScript
         {
             for(int j = 0; j < gridArray.GetLength(1);j++)
             {
-                debugText[i,j] = UtilsClass.CreateWorldText(gridArray[i, j].ToString(),null, GetWorldPositions(i,j) + new Vector3(cellSize,cellSize) * 0.5f,20,Color.white,TextAnchor.MiddleCenter );
+                // debugText[i,j] = UtilsClass.CreateWorldText(gridArray[i, j].ToString(),null, GetWorldPositions(i,j) + new Vector3(cellSize,cellSize) * 0.5f,20,Color.white,TextAnchor.MiddleCenter );
+                Debug.Log(i + " " + j);
+                objects[i,j] = createTileObject(gridArray[i,j], i, j);
+                
+                
                 //drawing lines to visually see bounds. Need to be able to see gizmos during runtime in order for this to work
-                Debug.DrawLine(GetWorldPositions(i, j), GetWorldPositions(i, j + 1), Color.white, 100f);
-                Debug.DrawLine(GetWorldPositions(i, j), GetWorldPositions(i + 1, j), Color.white, 100f);
+                // Debug.DrawLine(GetWorldPositions(i, j), GetWorldPositions(i, j + 1), Color.white, 100f);
+                // Debug.DrawLine(GetWorldPositions(i, j), GetWorldPositions(i + 1, j), Color.white, 100f);
 
 
 
@@ -51,6 +56,31 @@ public class GridScript
         return new Vector3(x, y) * cellSize;
 
     }
+
+    private GameObject createTileObject(int type, int x, int y){
+        //create  swicth case for each type
+        Texture2D tex = new Texture2D(100, 100);
+        GameObject tile = new GameObject(x + ""+ "" + y,typeof(SpriteRenderer));
+        Transform transform = tile.transform;
+        transform.SetParent(null, false);
+        transform.localPosition = GetWorldPositions(x, y);
+        // transform.localScale = localScale;
+        SpriteRenderer spriteRenderer = tile.GetComponent<SpriteRenderer>();
+        spriteRenderer.sprite = Sprite.Create(tex,new Rect(0.0f, 0.0f, tex.width, tex.height), new Vector2(0.5f, 0.5f), 100.0f);
+        // spriteRenderer.sortingOrder = sortingOrder;
+        if(type == 0){
+            spriteRenderer.color = new Color(0.9f, 0.9f, 0.9f, 1.0f);
+        }else if(type == 1){
+            spriteRenderer.color = new Color(153, 0, 0, 1.0f);
+        }else if(type == 2){
+            spriteRenderer.color = new Color(0, 52, 209, 1.0f);
+        }else if(type == 3){
+            spriteRenderer.color = new Color(255, 234, 0, 1.0f);
+        }
+
+        return tile;
+
+    }
     private void loadMapFile(string path){
         var reader = new StreamReader(File.OpenRead(path));
         int counter = 0;
@@ -65,6 +95,7 @@ public class GridScript
                 //Giving the map some textures to be seen on the scene. This will then now allow it to be interactable. Since
                 //I need to add some kind of texture to every element, we need a nested loop to modify every tile in the grid.
                 debugText = new TextMesh[width, height];
+                objects = new GameObject[width, height];
             }else{
                 //the rest of the entries are the types of tiles in the game 1 being wall 0 being walkable and the rest could be doors or items
                 int x = int.Parse(list[0]);
@@ -96,7 +127,7 @@ public class GridScript
         {
             //now set the value to the proper grid position
             gridArray[x, y] = value;
-            debugText[x, y].text = gridArray[x, y].ToString();
+            // debugText[x, y].text = gridArray[x, y].ToString();
         }
 
 
