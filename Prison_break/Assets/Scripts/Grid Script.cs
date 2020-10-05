@@ -12,7 +12,7 @@ public class GridScript
     private float cellSize;
     //matrix for the map, again initialized at constructor
     private int[,] gridArray;
-
+    public LayerMask walls;
     //text mesh array for the text within the grid
     private TextMesh[,] debugText;
     private GameObject[,] objects;
@@ -58,24 +58,35 @@ public class GridScript
     }
 
     private GameObject createTileObject(int type, int x, int y){
-        //create  swicth case for each type
         Texture2D tex = new Texture2D(100, 100);
-        GameObject tile = new GameObject(x + ""+ "" + y,typeof(SpriteRenderer));
+        GameObject tile = new GameObject(x + ""+ "" + y,typeof(SpriteRenderer));  
         Transform transform = tile.transform;
         transform.SetParent(null, false);
+        //Sets the position of the object
         transform.localPosition = GetWorldPositions(x, y);
-        // transform.localScale = localScale;
+        //Creates a sprite renderer to render the object from the tile
         SpriteRenderer spriteRenderer = tile.GetComponent<SpriteRenderer>();
         spriteRenderer.sprite = Sprite.Create(tex,new Rect(0.0f, 0.0f, tex.width, tex.height), new Vector2(0.5f, 0.5f), 100.0f);
-        // spriteRenderer.sortingOrder = sortingOrder;
+        //tile.layer sets the layer of the object for this case layer 7 is non colliding and layer 8 is colliding
+        Sprite [] sprites; 
+        sprites = Resources.LoadAll<Sprite>("Tiles");
+
+
+        
         if(type == 0){
-            spriteRenderer.color = new Color(0.9f, 0.9f, 0.9f, 1.0f);
+            spriteRenderer.sprite = (Sprite) sprites [2];
+            // spriteRenderer.color = new Color(0.9f, 0.9f, 0.9f, 1.0f);
+
+            tile.layer = 7;
         }else if(type == 1){
-            spriteRenderer.color = new Color(153, 0, 0, 1.0f);
+            spriteRenderer.sprite = (Sprite) sprites [3];
+            tile.layer = 8;
         }else if(type == 2){
             spriteRenderer.color = new Color(0, 52, 209, 1.0f);
+            tile.layer = 7;
         }else if(type == 3){
             spriteRenderer.color = new Color(255, 234, 0, 1.0f);
+            tile.layer = 7;
         }
 
         return tile;
