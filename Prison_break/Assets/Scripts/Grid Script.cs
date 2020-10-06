@@ -99,16 +99,7 @@ public class GridScript
         return tile;
 
     }
-    void OnTriggerEnter2D(Collider2D otherObject) {
-        Debug.Log("Cool1");
-        
-        
-        
-    }
-    void OnCollisionEnter2D(Collision2D otherObject) {
-        Debug.Log("Cool");
-        
-    }
+
     
     private void loadMapFile(string path){
         var reader = new StreamReader(File.OpenRead(path));
