@@ -6,13 +6,15 @@ public class MoveCharacter : MonoBehaviour
 {
 
     public float playerSpeed = 0.1f;
+    public Vector3 myPos;
+    public Transform myPlay;
 
     // Update is called once per frame
     void Update()
     {
         Vector3 pos = transform.position;
-
-        if(Input.GetKey("w") || Input.GetKey("up"))
+        
+        if (Input.GetKey("w") || Input.GetKey("up"))
         {
             pos.y += playerSpeed;
         }
@@ -32,5 +34,12 @@ public class MoveCharacter : MonoBehaviour
 
         transform.position = pos;
 
+    }
+
+    //for collisions
+    private void OnTriggerEnter2D(Collider2D coll)
+    {
+        Debug.Log("Item Obtained");
+        Destroy(coll.gameObject);
     }
 }

@@ -67,6 +67,13 @@ public class GridScript
         player.AddComponent<MoveCharacter>();
         player.AddComponent<Rigidbody2D>();
 
+        //Add a collider component to the player to detect collisions with walls, items, etc
+        player.AddComponent<BoxCollider2D>();
+        //set it to a variable to modify it
+        BoxCollider2D b2d = player.GetComponent<BoxCollider2D>();
+        //set the size of the colliders
+        b2d.size = new Vector2(1, 1.5f); 
+
         //does tranformations on sprites position and scale
         transform.SetParent(null, false);
         transform.localPosition = GetWorldPositions(0, 0);
@@ -92,30 +99,65 @@ public class GridScript
 
     private GameObject createTileObject(int type, int x, int y){
         Texture2D tex = new Texture2D(100, 100);
-        GameObject tile = new GameObject(x + ""+ "" + y,typeof(SpriteRenderer));  
+        GameObject tile = new GameObject(x + ""+ "" + y,typeof(SpriteRenderer));
+        
+
         Transform transform = tile.transform;
+        
         transform.SetParent(null, false);
+        
         //Sets the position of the object
         transform.localPosition = GetWorldPositions(x, y);
+        
         //Creates a sprite renderer to render the object from the tile
         SpriteRenderer spriteRenderer = tile.GetComponent<SpriteRenderer>();
+        
         spriteRenderer.sprite = Sprite.Create(tex,new Rect(0.0f, 0.0f, tex.width, tex.height), new Vector2(0.5f, 0.5f), 100.0f);
+        
         //tile.layer sets the layer of the object for this case layer 7 is non colliding and layer 8 is colliding
         Sprite [] sprites; 
         sprites = Resources.LoadAll<Sprite>("Tiles");
 
 
         
-        if(type == 0){
+        if(type == 0){//default grassy background
             spriteRenderer.sprite = (Sprite) sprites [2];
             // spriteRenderer.color = new Color(0.9f, 0.9f, 0.9f, 1.0f);
-
+            
             tile.layer = 7;
-        }else if(type == 1){
+        }else if(type == 1){//wall tiles
             spriteRenderer.sprite = (Sprite) sprites [3];
+            //adding just the collider to the walls, no on trigger effects needed.
+            tile.AddComponent<BoxCollider2D>();
             tile.layer = 8;
-        }else if(type == 2){
+        }else if(type == 2){//item tiles
+
+
+            //Adding a duplicate layer beneath it, so that when collision for the item is detected,
+            //we simply destroy that game object, revealing the default tile beneath
+            GameObject tile2 = new GameObject(x + "" + "" + y, typeof(SpriteRenderer));
+            Transform transform2 = tile2.transform;
+            transform2.SetParent(null, false);
+            transform2.localPosition = GetWorldPositions(x, y);
+            SpriteRenderer spriteRenderer2 = tile2.GetComponent<SpriteRenderer>();
+            spriteRenderer2.sprite = Sprite.Create(tex, new Rect(0.0f, 0.0f, tex.width, tex.height), new Vector2(0.5f, 0.5f), 100.0f);
+            spriteRenderer2.sprite = (Sprite)sprites[2];
+            tile2.layer = 7;
+
+
+
+
+            //code for the item tile
             spriteRenderer.color = new Color(0, 52, 209, 1.0f);
+
+
+
+            tile.AddComponent<BoxCollider2D>();
+            BoxCollider2D b2d = tile.GetComponent<BoxCollider2D>();
+            b2d.isTrigger = true;
+
+
+           
             tile.layer = 7;
         }else if(type == 3){
             spriteRenderer.color = new Color(255, 234, 0, 1.0f);
