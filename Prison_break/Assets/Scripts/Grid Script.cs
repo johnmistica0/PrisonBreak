@@ -16,22 +16,21 @@ public class GridScript
     //text mesh array for the text within the grid
     private TextMesh[,] debugText;
     private GameObject[,] objects;
+    private GameObject player;
     public GridScript(float cs, string path)
     {
         cellSize = cs;
         loadMapFile(path);
-       
-        
-
-        for(int i = 0; i < gridArray.GetLength(0);i++)
+        player = createPlayerObject();
+        for (int i = 0; i < gridArray.GetLength(0); i++)
         {
-            for(int j = 0; j < gridArray.GetLength(1);j++)
+            for (int j = 0; j < gridArray.GetLength(1); j++)
             {
                 // debugText[i,j] = UtilsClass.CreateWorldText(gridArray[i, j].ToString(),null, GetWorldPositions(i,j) + new Vector3(cellSize,cellSize) * 0.5f,20,Color.white,TextAnchor.MiddleCenter );
                 Debug.Log(i + " " + j);
-                objects[i,j] = createTileObject(gridArray[i,j], i, j);
-                
-                
+                objects[i, j] = createTileObject(gridArray[i, j], i, j);
+
+
                 //drawing lines to visually see bounds. Need to be able to see gizmos during runtime in order for this to work
                 // Debug.DrawLine(GetWorldPositions(i, j), GetWorldPositions(i, j + 1), Color.white, 100f);
                 // Debug.DrawLine(GetWorldPositions(i, j), GetWorldPositions(i + 1, j), Color.white, 100f);
@@ -40,10 +39,11 @@ public class GridScript
 
             }
         }
+
         //the lines in the loop do not close off the top and right borders of the grid. These two lines basically draw the top and right border
         //closing it off completing the grid structure.
-        Debug.DrawLine(GetWorldPositions(0,height), GetWorldPositions(width,height), Color.white, 100f);
-        Debug.DrawLine(GetWorldPositions(width,0), GetWorldPositions(width,height), Color.white, 100f);
+        Debug.DrawLine(GetWorldPositions(0, height), GetWorldPositions(width, height), Color.white, 100f);
+        Debug.DrawLine(GetWorldPositions(width, 0), GetWorldPositions(width, height), Color.white, 100f);
 
         //testing the setvalue function
         SetValue(4, 2, 69);
@@ -55,6 +55,39 @@ public class GridScript
     {
         return new Vector3(x, y) * cellSize;
 
+    }
+
+    private GameObject createPlayerObject()
+    {
+        Texture2D tex = new Texture2D(100, 100);
+        GameObject player = new GameObject("Player", typeof(SpriteRenderer));
+        Transform transform = player.transform;
+
+        //adds r2b2d and moveCharacter script to player GameObject
+        player.AddComponent<MoveCharacter>();
+        player.AddComponent<Rigidbody2D>();
+
+        //does tranformations on sprites position and scale
+        transform.SetParent(null, false);
+        transform.localPosition = GetWorldPositions(0, 0);
+        transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
+
+        //creates a new spriteRenderer for the player GameObject
+        SpriteRenderer spriteRenderer = player.GetComponent<SpriteRenderer>();
+        spriteRenderer.sprite = Sprite.Create(tex, new Rect(0.0f, 0.0f, tex.width, tex.height), new Vector2(0.5f, 0.5f), 100.0f);
+        //set to 32767(max) - prevents player from clipper under any other sprite
+        spriteRenderer.sortingOrder = 32767;
+
+        //sets rb2d gravity to 0
+        Rigidbody2D rb2d = player.GetComponent<Rigidbody2D>();
+        rb2d.gravityScale = 0;
+
+        //loads wizard sprite onto player
+        Sprite[] sprites;
+        sprites = Resources.LoadAll<Sprite>("Fantasy");
+        spriteRenderer.sprite = (Sprite)sprites[4];
+
+        return player;
     }
 
     private GameObject createTileObject(int type, int x, int y){
