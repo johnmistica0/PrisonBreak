@@ -28,7 +28,6 @@ public class GridScript
             for(int j = 0; j < gridArray.GetLength(1);j++)
             {
                 // debugText[i,j] = UtilsClass.CreateWorldText(gridArray[i, j].ToString(),null, GetWorldPositions(i,j) + new Vector3(cellSize,cellSize) * 0.5f,20,Color.white,TextAnchor.MiddleCenter );
-                Debug.Log(i + " " + j);
                 objects[i,j] = createTileObject(gridArray[i,j], i, j);
                 
                 
@@ -59,13 +58,21 @@ public class GridScript
 
     private GameObject createTileObject(int type, int x, int y){
         Texture2D tex = new Texture2D(100, 100);
-        GameObject tile = new GameObject(x + ""+ "" + y,typeof(SpriteRenderer));  
+        GameObject tile = new GameObject(x + ""+ "" + y,typeof(SpriteRenderer), typeof(Rigidbody2D),typeof(BoxCollider2D));  
         Transform transform = tile.transform;
         transform.SetParent(null, false);
         //Sets the position of the object
         transform.localPosition = GetWorldPositions(x, y);
         //Creates a sprite renderer to render the object from the tile
         SpriteRenderer spriteRenderer = tile.GetComponent<SpriteRenderer>();
+        BoxCollider2D boxCollider2d = tile.GetComponent<BoxCollider2D>();
+        Rigidbody2D rigidBody2D = tile.GetComponent<Rigidbody2D>();
+        rigidBody2D.gravityScale = 0;
+        rigidBody2D.bodyType = RigidbodyType2D.Static;
+        boxCollider2d.size = new Vector2(cellSize, cellSize);
+        boxCollider2d.edgeRadius = cellSize;
+
+        // boxCollider2d.sprite = Sprite.Create(tex,new Rect(0.0f, 0.0f, tex.width, tex.height), new Vector2(0.5f, 0.5f), 100.0f);
         spriteRenderer.sprite = Sprite.Create(tex,new Rect(0.0f, 0.0f, tex.width, tex.height), new Vector2(0.5f, 0.5f), 100.0f);
         //tile.layer sets the layer of the object for this case layer 7 is non colliding and layer 8 is colliding
         Sprite [] sprites; 
@@ -92,6 +99,17 @@ public class GridScript
         return tile;
 
     }
+    void OnTriggerEnter2D(Collider2D otherObject) {
+        Debug.Log("Cool1");
+        
+        
+        
+    }
+    void OnCollisionEnter2D(Collision2D otherObject) {
+        Debug.Log("Cool");
+        
+    }
+    
     private void loadMapFile(string path){
         var reader = new StreamReader(File.OpenRead(path));
         int counter = 0;
@@ -114,8 +132,7 @@ public class GridScript
                 //checking if out of bounds from grid
                 if(x < width && y < height){
                     int tileType = int.Parse(list[2]);
-                    gridArray[x,y] = tileType;
-                    Debug.Log(gridArray[x,y]); 
+                    gridArray[x,y] = tileType; 
                 }else{
                     //exit from game since map is incorrect format
                 }
