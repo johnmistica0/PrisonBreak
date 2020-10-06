@@ -45,7 +45,7 @@ public class MoveCharacter : MonoBehaviour
             body.MovePosition(new Vector2(pos.x + playerSpeed, pos.y));
         }
 
-        transform.position = pos;
+        // transform.position = pos;
 
     }
 

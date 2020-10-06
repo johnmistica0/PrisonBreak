@@ -16,44 +16,66 @@ public class GridScript
     //text mesh array for the text within the grid
     private TextMesh[,] debugText;
     private GameObject[,] objects;
+    private GameObject[] invisibleWalls;
+    private GameObject invisibleWallContainer;
+    private GameObject floorContainer;
+    private GameObject doorsContainer;
+    private GameObject itemsContainer;
+    private GameObject wallsContainer;
     private GameObject player;
+    private Sprite[] itemSprites;
+    private Sprite [] tileSprites;
+    private Sprite [] playerSprites;
+        
+    
+
+    
+
     public GridScript(float cs, string path)
     {
         cellSize = cs;
         loadMapFile(path);
+        //creates containers for objects
+        createContainers();
+        //loads sprites into game
+        loadResources();
+
         player = createPlayerObject();
         for (int i = 0; i < gridArray.GetLength(0); i++)
         {
             for (int j = 0; j < gridArray.GetLength(1); j++)
             {
-                // debugText[i,j] = UtilsClass.CreateWorldText(gridArray[i, j].ToString(),null, GetWorldPositions(i,j) + new Vector3(cellSize,cellSize) * 0.5f,20,Color.white,TextAnchor.MiddleCenter );
-
-               
-                
-                
-
-               
                 objects[i, j] = createTileObject(gridArray[i, j], i, j);
-
-                //drawing lines to visually see bounds. Need to be able to see gizmos during runtime in order for this to work
-                // Debug.DrawLine(GetWorldPositions(i, j), GetWorldPositions(i, j + 1), Color.white, 100f);
-                // Debug.DrawLine(GetWorldPositions(i, j), GetWorldPositions(i + 1, j), Color.white, 100f);
-
-
 
             }
         }
+        //creates invisible walls around the grid
+        renderInvisibleWalls();
 
         //the lines in the loop do not close off the top and right borders of the grid. These two lines basically draw the top and right border
         //closing it off completing the grid structure.
-        Debug.DrawLine(GetWorldPositions(0, height), GetWorldPositions(width, height), Color.white, 100f);
-        Debug.DrawLine(GetWorldPositions(width, 0), GetWorldPositions(width, height), Color.white, 100f);
+        // Debug.DrawLine(GetWorldPositions(0, height), GetWorldPositions(width, height), Color.white, 100f);
+        // Debug.DrawLine(GetWorldPositions(width, 0), GetWorldPositions(width, height), Color.white, 100f);
 
         //testing the setvalue function
-        SetValue(4, 2, 69);
+        // SetValue(4, 2, 69);
 
 
     }
+    private void loadResources(){
+        itemSprites = Resources.LoadAll<Sprite>("Items");
+        tileSprites = Resources.LoadAll<Sprite>("Tiles");
+        playerSprites  = Resources.LoadAll<Sprite>("Fantasy");  
+    }
+
+    private void createContainers(){
+        floorContainer = new GameObject("FloorContainer");
+        itemsContainer = new GameObject("ItemsContainer");
+        doorsContainer = new GameObject("DoorsContainer");
+        wallsContainer = new GameObject("WallsContainer");
+    }
+
+
     //using premade packages, just scales the positions of the world by the cellsize made during construction
     private Vector3 GetWorldPositions(int x, int y)
     {
@@ -99,93 +121,94 @@ public class GridScript
         rb2d.interpolation = RigidbodyInterpolation2D.Extrapolate;
         rb2d.angularDrag = 0;
         rb2d.freezeRotation = true;
-        
-
-
         //loads wizard sprite onto player
-        Sprite[] sprites;
-        sprites = Resources.LoadAll<Sprite>("Fantasy");
-        spriteRenderer.sprite = (Sprite)sprites[4];
+        
+        spriteRenderer.sprite = (Sprite)playerSprites[4];
 
         return player;
     }
 
+    private void renderInvisibleWalls(){
+        invisibleWallContainer = new GameObject("InvisibleWallContainer");
+        //creates two walls per for loop, sets box one position under 0 and one at the height and width
+        for(int i = 0; i < width; i++){
+            GameObject invWall1 = new GameObject(i + ","+ -1,typeof(BoxCollider2D)); 
+            GameObject invWall2 = new GameObject(i + "," + width, typeof(BoxCollider2D));
+            Transform transform1 = invWall1.transform;
+            Transform transform2 = invWall2.transform;
+            transform1.SetParent(invisibleWallContainer.transform, false);
+            transform2.SetParent(invisibleWallContainer.transform, false);
+            transform1.localPosition = GetWorldPositions(i, -1);
+            transform2.localPosition = GetWorldPositions(i, width);
+        }
+        for(int i = 0; i < height; i++){
+            GameObject invWall1 = new GameObject(-1 + ","+ i,typeof(BoxCollider2D)); 
+            GameObject invWall2 = new GameObject(height + 1 + "," + i, typeof(BoxCollider2D));
+            Transform transform1 = invWall1.transform;
+            Transform transform2 = invWall2.transform;
+            transform1.SetParent(invisibleWallContainer.transform, false);
+            transform2.SetParent(invisibleWallContainer.transform, false);
+            transform1.localPosition = GetWorldPositions( -1, i);
+            transform2.localPosition = GetWorldPositions( height, i);
+        }
+
+        
+
+    }
+
     private GameObject createTileObject(int type, int x, int y){
+        //Creates texture for tile also determines size
         Texture2D tex = new Texture2D(100, 100);
         GameObject tile = new GameObject(x + ""+ "" + y,typeof(SpriteRenderer));  
-
-        // GameObject tile = new GameObject(x + ""+ "" + y,typeof(SpriteRenderer));
-        
-
-
         Transform transform = tile.transform;
-        
-        transform.SetParent(null, false);
-        
         //Sets the position of the object
         transform.localPosition = GetWorldPositions(x, y);
-        
         //Creates a sprite renderer to render the object from the tile
         SpriteRenderer spriteRenderer = tile.GetComponent<SpriteRenderer>();
-
-      
-
-        // boxCollider2d.sprite = Sprite.Create(tex,new Rect(0.0f, 0.0f, tex.width, tex.height), new Vector2(0.5f, 0.5f), 100.0f);
-
-
         spriteRenderer.sprite = Sprite.Create(tex,new Rect(0.0f, 0.0f, tex.width, tex.height), new Vector2(0.5f, 0.5f), 100.0f);
         
-        //tile.layer sets the layer of the object for this case layer 7 is non colliding and layer 8 is colliding
-        Sprite [] sprites; 
-        sprites = Resources.LoadAll<Sprite>("Tiles");
 
 
         
         if(type == 0){//default grassy background
-            spriteRenderer.sprite = (Sprite) sprites [2];
+            transform.SetParent(floorContainer.transform, false);
+            spriteRenderer.sprite = (Sprite) tileSprites [2];
             // spriteRenderer.color = new Color(0.9f, 0.9f, 0.9f, 1.0f);
             
-            tile.layer = 7;
         }else if(type == 1){//wall tiles
-            spriteRenderer.sprite = (Sprite) sprites [3];
+            transform.SetParent(wallsContainer.transform, false);
+            spriteRenderer.sprite = (Sprite) tileSprites [3];
             //adding just the collider to the walls, no on trigger effects needed.
             tile.AddComponent<BoxCollider2D>();
             BoxCollider2D b2d = tile.GetComponent<BoxCollider2D>();
             b2d.size = new Vector2(1, 1);
 
-            tile.layer = 8;
+            
         }else if(type == 2){//item tiles
 
 
             //Adding a duplicate layer beneath it, so that when collision for the item is detected,
             //we simply destroy that game object, revealing the default tile beneath
-            GameObject tile2 = new GameObject(x + "" + "" + y, typeof(SpriteRenderer));
+            GameObject tile2 = new GameObject(x + "," + y, typeof(SpriteRenderer));
             Transform transform2 = tile2.transform;
-            transform2.SetParent(null, false);
+            transform2.SetParent(itemsContainer.transform, false);
+            transform.SetParent(floorContainer.transform, false);
             transform2.localPosition = GetWorldPositions(x, y);
             SpriteRenderer spriteRenderer2 = tile2.GetComponent<SpriteRenderer>();
             spriteRenderer2.sprite = Sprite.Create(tex, new Rect(0.0f, 0.0f, tex.width, tex.height), new Vector2(0.5f, 0.5f), 100.0f);
-            spriteRenderer2.sprite = (Sprite)sprites[2];
-            tile2.layer = 7;
-
-
-
+            spriteRenderer2.sprite = (Sprite)tileSprites[2];
+            //sorting order so that the item image renders over the grass block
+            spriteRenderer.sortingOrder = 1;
+            spriteRenderer2.sortingOrder = 0;
 
             //code for the item tile
-            spriteRenderer.color = new Color(0, 52, 209, 1.0f);
-
-
-
+            spriteRenderer.sprite = (Sprite) itemSprites[14];
             tile.AddComponent<BoxCollider2D>();
             BoxCollider2D b2d = tile.GetComponent<BoxCollider2D>();
             b2d.isTrigger = true;
-
-
-           
-            tile.layer = 7;
         }else if(type == 3){
+            transform.SetParent(doorsContainer.transform, false);
             spriteRenderer.color = new Color(255, 234, 0, 1.0f);
-            tile.layer = 7;
         }
 
         return tile;
@@ -223,7 +246,12 @@ public class GridScript
             counter++;
         }
     }
-
+    public int getWidth(){
+        return width;
+    }
+    public int getHeight(){
+        return height;
+    }
 
     private void getXY(Vector3 wp, out int x, out int y)
     {
