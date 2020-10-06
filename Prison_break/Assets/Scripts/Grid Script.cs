@@ -27,16 +27,14 @@ public class GridScript
             for (int j = 0; j < gridArray.GetLength(1); j++)
             {
                 // debugText[i,j] = UtilsClass.CreateWorldText(gridArray[i, j].ToString(),null, GetWorldPositions(i,j) + new Vector3(cellSize,cellSize) * 0.5f,20,Color.white,TextAnchor.MiddleCenter );
-<<<<<<< HEAD
-                objects[i,j] = createTileObject(gridArray[i,j], i, j);
+
+               
                 
                 
-=======
-                Debug.Log(i + " " + j);
+
+               
                 objects[i, j] = createTileObject(gridArray[i, j], i, j);
 
-
->>>>>>> 14861aa117881ee7e5320058d89c29be0300d113
                 //drawing lines to visually see bounds. Need to be able to see gizmos during runtime in order for this to work
                 // Debug.DrawLine(GetWorldPositions(i, j), GetWorldPositions(i, j + 1), Color.white, 100f);
                 // Debug.DrawLine(GetWorldPositions(i, j), GetWorldPositions(i + 1, j), Color.white, 100f);
@@ -101,6 +99,7 @@ public class GridScript
         rb2d.interpolation = RigidbodyInterpolation2D.Extrapolate;
         rb2d.angularDrag = 0;
         rb2d.freezeRotation = true;
+        
 
 
         //loads wizard sprite onto player
@@ -113,13 +112,12 @@ public class GridScript
 
     private GameObject createTileObject(int type, int x, int y){
         Texture2D tex = new Texture2D(100, 100);
-<<<<<<< HEAD
-        GameObject tile = new GameObject(x + ""+ "" + y,typeof(SpriteRenderer), typeof(Rigidbody2D),typeof(BoxCollider2D));  
-=======
-        GameObject tile = new GameObject(x + ""+ "" + y,typeof(SpriteRenderer));
+        GameObject tile = new GameObject(x + ""+ "" + y,typeof(SpriteRenderer));  
+
+        // GameObject tile = new GameObject(x + ""+ "" + y,typeof(SpriteRenderer));
         
 
->>>>>>> 14861aa117881ee7e5320058d89c29be0300d113
+
         Transform transform = tile.transform;
         
         transform.SetParent(null, false);
@@ -129,18 +127,12 @@ public class GridScript
         
         //Creates a sprite renderer to render the object from the tile
         SpriteRenderer spriteRenderer = tile.GetComponent<SpriteRenderer>();
-<<<<<<< HEAD
-        BoxCollider2D boxCollider2d = tile.GetComponent<BoxCollider2D>();
-        Rigidbody2D rigidBody2D = tile.GetComponent<Rigidbody2D>();
-        rigidBody2D.gravityScale = 0;
-        rigidBody2D.bodyType = RigidbodyType2D.Static;
-        boxCollider2d.size = new Vector2(cellSize, cellSize);
-        boxCollider2d.edgeRadius = cellSize;
+
+      
 
         // boxCollider2d.sprite = Sprite.Create(tex,new Rect(0.0f, 0.0f, tex.width, tex.height), new Vector2(0.5f, 0.5f), 100.0f);
-=======
-        
->>>>>>> 14861aa117881ee7e5320058d89c29be0300d113
+
+
         spriteRenderer.sprite = Sprite.Create(tex,new Rect(0.0f, 0.0f, tex.width, tex.height), new Vector2(0.5f, 0.5f), 100.0f);
         
         //tile.layer sets the layer of the object for this case layer 7 is non colliding and layer 8 is colliding
