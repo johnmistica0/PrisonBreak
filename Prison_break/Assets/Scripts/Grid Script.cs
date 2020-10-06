@@ -72,7 +72,10 @@ public class GridScript
         //set it to a variable to modify it
         BoxCollider2D b2d = player.GetComponent<BoxCollider2D>();
         //set the size of the colliders
-        b2d.size = new Vector2(1, 1.5f); 
+        b2d.size = new Vector2(1, 1.5f);
+
+        //also adding a polygon collider to make it more smooth
+        //player.AddComponent<PolygonCollider2D>();
 
         //does tranformations on sprites position and scale
         transform.SetParent(null, false);
@@ -88,6 +91,11 @@ public class GridScript
         //sets rb2d gravity to 0
         Rigidbody2D rb2d = player.GetComponent<Rigidbody2D>();
         rb2d.gravityScale = 0;
+        rb2d.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
+        rb2d.interpolation = RigidbodyInterpolation2D.Extrapolate;
+        rb2d.angularDrag = 0;
+        rb2d.freezeRotation = true;
+
 
         //loads wizard sprite onto player
         Sprite[] sprites;
@@ -129,6 +137,9 @@ public class GridScript
             spriteRenderer.sprite = (Sprite) sprites [3];
             //adding just the collider to the walls, no on trigger effects needed.
             tile.AddComponent<BoxCollider2D>();
+            BoxCollider2D b2d = tile.GetComponent<BoxCollider2D>();
+            b2d.size = new Vector2(1, 1);
+
             tile.layer = 8;
         }else if(type == 2){//item tiles
 
