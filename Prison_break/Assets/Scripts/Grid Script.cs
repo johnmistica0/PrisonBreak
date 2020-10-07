@@ -159,7 +159,7 @@ public class GridScript
     private GameObject createTileObject(int type, int x, int y){
         //Creates texture for tile also determines size
         Texture2D tex = new Texture2D(100, 100);
-        GameObject tile = new GameObject(x + ""+ "" + y,typeof(SpriteRenderer));  
+        GameObject tile = new GameObject(x + "," + y,typeof(SpriteRenderer));  
         Transform transform = tile.transform;
         //Sets the position of the object
         transform.localPosition = GetWorldPositions(x, y);
