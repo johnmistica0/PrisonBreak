@@ -60,7 +60,8 @@ public class GridScript
         //testing the setvalue function
         // SetValue(4, 2, 69);
 
-
+        // Create Camera
+        createCameraObject();
     }
     private void loadResources(){
         itemSprites = Resources.LoadAll<Sprite>("Items");
@@ -81,6 +82,13 @@ public class GridScript
     {
         return new Vector3(x, y) * cellSize;
 
+    }
+
+    private void createCameraObject()
+    {
+        GameObject camera = Camera.main.gameObject;
+        camera.AddComponent<MoveCamera>();
+        camera.GetComponent<MoveCamera>().player = player;
     }
 
     private GameObject createPlayerObject()
