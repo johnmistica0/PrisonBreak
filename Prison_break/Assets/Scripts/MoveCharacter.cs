@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MoveCharacter : MonoBehaviour
 {
@@ -10,11 +11,14 @@ public class MoveCharacter : MonoBehaviour
     public Vector3 myPos;
     //public Transform myPlay;
     private Rigidbody2D body;
+    static int levelKey = 1;
 
     private void Start()
     {
         body = GetComponent<Rigidbody2D>();
         body.freezeRotation = true;
+        Vector3 startingPos = new Vector3(1, 1, 0);
+        transform.position = startingPos;
     }
 
     // Update is called once per frame
@@ -54,8 +58,21 @@ public class MoveCharacter : MonoBehaviour
     //for collisions
     private void OnTriggerEnter2D(Collider2D coll)
     {
-        Debug.Log("Item Obtained");
-        Destroy(coll.gameObject);
+        if(coll.gameObject.name == "Item")
+        {
+            Debug.Log("Item Obtained");
+            Destroy(coll.gameObject);
+        }
+        else if(coll.gameObject.name == "Door")
+        {
+            
+            levelKey++;
+            string sceneString = "Level" + levelKey.ToString() + "Scene";
+            Debug.Log(levelKey);
+            UnityEngine.SceneManagement.SceneManager.LoadScene(sceneName: sceneString);
+            
+        }
+        
 
     }
 }

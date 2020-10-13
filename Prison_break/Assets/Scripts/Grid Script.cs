@@ -25,6 +25,7 @@ public class GridScript
     private GameObject player;
     private Sprite[] itemSprites;
     private Sprite [] tileSprites;
+    private Sprite[] doorSprites;
     private Sprite [] playerSprites;
         
     
@@ -66,6 +67,7 @@ public class GridScript
     private void loadResources(){
         itemSprites = Resources.LoadAll<Sprite>("Items");
         tileSprites = Resources.LoadAll<Sprite>("Tiles");
+        doorSprites = Resources.LoadAll<Sprite>("Door");
         playerSprites  = Resources.LoadAll<Sprite>("Fantasy");  
     }
 
@@ -213,10 +215,31 @@ public class GridScript
             spriteRenderer.sprite = (Sprite) itemSprites[14];
             tile.AddComponent<BoxCollider2D>();
             BoxCollider2D b2d = tile.GetComponent<BoxCollider2D>();
+            tile.gameObject.name = "Item";
             b2d.isTrigger = true;
-        }else if(type == 3){
+        }else if(type == 3){//"door" tiles
+
+            GameObject tile2 = new GameObject(x + "," + y, typeof(SpriteRenderer));
+            Transform transform2 = tile2.transform;
+            transform2.SetParent(itemsContainer.transform, false);
+            transform.SetParent(floorContainer.transform, false);
+            transform2.localPosition = GetWorldPositions(x, y);
+            SpriteRenderer spriteRenderer2 = tile2.GetComponent<SpriteRenderer>();
+            spriteRenderer2.sprite = Sprite.Create(tex, new Rect(0.0f, 0.0f, tex.width, tex.height), new Vector2(0.5f, 0.5f), 100.0f);
+            spriteRenderer2.sprite = (Sprite)tileSprites[2];
+            //sorting order so that the item image renders over the grass block
+            spriteRenderer.sortingOrder = 1;
+            spriteRenderer2.sortingOrder = 0;
+
+
             transform.SetParent(doorsContainer.transform, false);
-            spriteRenderer.color = new Color(255, 234, 0, 1.0f);
+            //spriteRenderer.color = new Color(255, 234, 0, 1.0f);
+            spriteRenderer.sprite = (Sprite)doorSprites[2];
+            tile.AddComponent<BoxCollider2D>();
+            BoxCollider2D b2d = tile.GetComponent<BoxCollider2D>();
+            b2d.isTrigger = true;
+
+            tile.gameObject.name = "Door";
         }
 
         return tile;
