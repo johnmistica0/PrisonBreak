@@ -162,6 +162,7 @@ public class GridScript
         BoxCollider2D b2d = npc.GetComponent<BoxCollider2D>();
         //set the size of the colliders
         b2d.size = new Vector2(1, 1.5f);
+        b2d.isTrigger = true;
 
         //also adding a polygon collider to make it more smooth
         //player.AddComponent<PolygonCollider2D>();
