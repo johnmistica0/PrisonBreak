@@ -72,7 +72,14 @@ public class MoveCharacter : MonoBehaviour
             UnityEngine.SceneManagement.SceneManager.LoadScene(sceneName: sceneString);
             
         }
-        
+        else if (coll.gameObject.name == "NPC")
+        {
+
+            UnityEngine.SceneManagement.SceneManager.LoadScene("Level1Scene");
+
+        }
+
+
 
     }
 }
