@@ -23,14 +23,18 @@ public class GridScript
     private GameObject itemsContainer;
     private GameObject wallsContainer;
     private GameObject player;
+    private GameObject[] npc;
+    private int NPCnum;
+    private int[] NPClocation;
     private Sprite[] itemSprites;
     private Sprite [] tileSprites;
     private Sprite[] doorSprites;
     private Sprite [] playerSprites;
-        
-    
+    private Sprite[] moreTileSprites;
 
-    
+
+
+
 
     public GridScript(float cs, string path)
     {
@@ -42,6 +46,10 @@ public class GridScript
         loadResources();
 
         player = createPlayerObject();
+
+        for(int i = 0; i < npc.GetLength(0); i++)
+            npc[i] = createNPCObject(NPClocation[i],NPClocation[i+1]);
+
         for (int i = 0; i < gridArray.GetLength(0); i++)
         {
             for (int j = 0; j < gridArray.GetLength(1); j++)
@@ -68,7 +76,8 @@ public class GridScript
         itemSprites = Resources.LoadAll<Sprite>("Items");
         tileSprites = Resources.LoadAll<Sprite>("Tiles");
         doorSprites = Resources.LoadAll<Sprite>("Door");
-        playerSprites  = Resources.LoadAll<Sprite>("Fantasy");  
+        playerSprites  = Resources.LoadAll<Sprite>("prison");
+        moreTileSprites = Resources.LoadAll<Sprite>("Prison_A5");
     }
 
     private void createContainers(){
@@ -113,16 +122,17 @@ public class GridScript
         //also adding a polygon collider to make it more smooth
         //player.AddComponent<PolygonCollider2D>();
 
-        //does tranformations on sprites position and scale
-        transform.SetParent(null, false);
-        transform.localPosition = GetWorldPositions(0, 0);
-        transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
 
         //creates a new spriteRenderer for the player GameObject
         SpriteRenderer spriteRenderer = player.GetComponent<SpriteRenderer>();
         spriteRenderer.sprite = Sprite.Create(tex, new Rect(0.0f, 0.0f, tex.width, tex.height), new Vector2(0.5f, 0.5f), 100.0f);
         //set to 32767(max) - prevents player from clipper under any other sprite
         spriteRenderer.sortingOrder = 32767;
+
+        //does tranformations on sprites position and scale
+        transform.SetParent(null, false);
+        transform.localPosition = GetWorldPositions(0, 0);
+        transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
 
         //sets rb2d gravity to 0
         Rigidbody2D rb2d = player.GetComponent<Rigidbody2D>();
@@ -133,9 +143,52 @@ public class GridScript
         rb2d.freezeRotation = true;
         //loads wizard sprite onto player
         
-        spriteRenderer.sprite = (Sprite)playerSprites[4];
+        spriteRenderer.sprite = (Sprite)playerSprites[30];
 
         return player;
+    }
+
+    private GameObject createNPCObject(int x, int y)
+    {
+        Texture2D tex = new Texture2D(100, 100);
+        GameObject npc = new GameObject("NPC", typeof(SpriteRenderer));
+        Transform transform = npc.transform;
+
+        npc.AddComponent<Rigidbody2D>();
+
+        //Add a collider component to the player to detect collisions with walls, items, etc
+        npc.AddComponent<BoxCollider2D>();
+        //set it to a variable to modify it
+        BoxCollider2D b2d = npc.GetComponent<BoxCollider2D>();
+        //set the size of the colliders
+        b2d.size = new Vector2(1, 1.5f);
+
+        //also adding a polygon collider to make it more smooth
+        //player.AddComponent<PolygonCollider2D>();
+
+        //does tranformations on sprites position and scale
+        transform.SetParent(null, false);
+        transform.localPosition = GetWorldPositions(x, y);
+        transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
+
+        //creates a new spriteRenderer for the player GameObject
+        SpriteRenderer spriteRenderer = npc.GetComponent<SpriteRenderer>();
+        spriteRenderer.sprite = Sprite.Create(tex, new Rect(0.0f, 0.0f, tex.width, tex.height), new Vector2(0.5f, 0.5f), 100.0f);
+        //set to 32767(max) - prevents player from clipper under any other sprite
+        spriteRenderer.sortingOrder = 32767;
+
+        //sets rb2d gravity to 0
+        Rigidbody2D rb2d = npc.GetComponent<Rigidbody2D>();
+        rb2d.gravityScale = 0;
+        rb2d.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
+        rb2d.interpolation = RigidbodyInterpolation2D.Extrapolate;
+        rb2d.angularDrag = 0;
+        rb2d.freezeRotation = true;
+        //loads wizard sprite onto player
+
+        spriteRenderer.sprite = (Sprite)playerSprites[9];
+
+        return npc;
     }
 
     private void renderInvisibleWalls(){
@@ -182,7 +235,7 @@ public class GridScript
         
         if(type == 0){//default grassy background
             transform.SetParent(floorContainer.transform, false);
-            spriteRenderer.sprite = (Sprite) tileSprites [2];
+            spriteRenderer.sprite = (Sprite) moreTileSprites [0];
             // spriteRenderer.color = new Color(0.9f, 0.9f, 0.9f, 1.0f);
             
         }else if(type == 1){//wall tiles
@@ -252,8 +305,9 @@ public class GridScript
         int counter = 0;
         while(!reader.EndOfStream){
             var line = reader.ReadLine();
-            var list = line.Split(','); 
-            if(counter == 0){
+            var list = line.Split(',');
+            if (counter == 0)
+            {
                 width = int.Parse(list[0]);
                 height = int.Parse(list[1]);
                 //initialize array from file width and height the first entry in the file
@@ -262,15 +316,33 @@ public class GridScript
                 //I need to add some kind of texture to every element, we need a nested loop to modify every tile in the grid.
                 debugText = new TextMesh[width, height];
                 objects = new GameObject[width, height];
-            }else{
+            }
+            else if (counter == 1)//loads NPC data from csv file
+            {
+                //number of NPCs on map
+                NPCnum = int.Parse(list[0]);
+                npc = new GameObject[NPCnum];
+                NPClocation = new int[2 * NPCnum];
+                for(int i = 0; i < NPCnum; i++)
+                {
+                    NPClocation[i] = int.Parse(list[i+1]);
+                    NPClocation[i+1] = int.Parse(list[i+2]);
+                }
+
+            }
+            else
+            {
                 //the rest of the entries are the types of tiles in the game 1 being wall 0 being walkable and the rest could be doors or items
                 int x = int.Parse(list[0]);
                 int y = int.Parse(list[1]);
                 //checking if out of bounds from grid
-                if(x < width && y < height){
+                if (x < width && y < height)
+                {
                     int tileType = int.Parse(list[2]);
-                    gridArray[x,y] = tileType; 
-                }else{
+                    gridArray[x, y] = tileType;
+                }
+                else
+                {
                     //exit from game since map is incorrect format
                 }
             }
