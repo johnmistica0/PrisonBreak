@@ -166,7 +166,7 @@ GameObject:
   - component: {fileID: 1430855974}
   - component: {fileID: 1430855975}
   m_Layer: 5
-  m_Name: GameObject
+  m_Name: Escape menu
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
