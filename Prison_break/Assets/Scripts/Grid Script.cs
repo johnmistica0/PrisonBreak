@@ -126,8 +126,8 @@ public class GridScript
         //creates a new spriteRenderer for the player GameObject
         SpriteRenderer spriteRenderer = player.GetComponent<SpriteRenderer>();
         spriteRenderer.sprite = Sprite.Create(tex, new Rect(0.0f, 0.0f, tex.width, tex.height), new Vector2(0.5f, 0.5f), 100.0f);
-        //set to 32767(max) - prevents player from clipper under any other sprite
-        spriteRenderer.sortingOrder = 32767;
+        //set to 20 since need menus in front of it
+        spriteRenderer.sortingOrder = 20;
 
         //does tranformations on sprites position and scale
         transform.SetParent(null, false);
