@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 using CodeMonkey.Utils;
+using UnityEngine.AI;
 
 public class GridScript
 {
@@ -109,7 +110,8 @@ public class GridScript
         //set it to a variable to modify it
         BoxCollider2D b2d = player.GetComponent<BoxCollider2D>();
         //set the size of the colliders
-        b2d.size = new Vector2(1, 1.5f);
+        b2d.size = new Vector2(1.65f, 3.65f);
+        b2d.offset = new Vector2(0, 1f);
 
         //also adding a polygon collider to make it more smooth
         //player.AddComponent<PolygonCollider2D>();
@@ -147,13 +149,17 @@ public class GridScript
         Transform transform = npc.transform;
 
         npc.AddComponent<Rigidbody2D>();
-
+        npc.AddComponent<GuardPathing>();
+        npc.GetComponent<GuardPathing>().player = player;
+        npc.AddComponent<NavMeshAgent>();
+        
         //Add a collider component to the player to detect collisions with walls, items, etc
         npc.AddComponent<BoxCollider2D>();
         //set it to a variable to modify it
         BoxCollider2D b2d = npc.GetComponent<BoxCollider2D>();
         //set the size of the colliders
-        b2d.size = new Vector2(1, 1.5f);
+        b2d.size = new Vector2(1.65f, 3.65f);
+        b2d.offset = new Vector2(0, 1f);
         b2d.isTrigger = true;
 
         //does tranformations on sprites position and scale
@@ -230,7 +236,7 @@ public class GridScript
             
         }else if(type == 1){//wall tiles
             transform.SetParent(wallsContainer.transform, false);
-            spriteRenderer.sprite = (Sprite) tileSprites [3];
+            spriteRenderer.sprite = (Sprite) tileSprites [4];
             //adding just the collider to the walls, no on trigger effects needed.
             tile.AddComponent<BoxCollider2D>();
             BoxCollider2D b2d = tile.GetComponent<BoxCollider2D>();
@@ -272,7 +278,7 @@ public class GridScript
             transform2.localPosition = GetWorldPositions(x, y);
             SpriteRenderer spriteRenderer2 = tile2.GetComponent<SpriteRenderer>();
             spriteRenderer2.sprite = Sprite.Create(tex, new Rect(0.0f, 0.0f, tex.width, tex.height), new Vector2(0.5f, 0.5f), 100.0f);
-            spriteRenderer2.sprite = (Sprite)tileSprites[2];
+            spriteRenderer2.sprite = (Sprite)tileSprites[4];
             //sorting order so that the item image renders over the grass block
             spriteRenderer.sortingOrder = 1;
             spriteRenderer2.sortingOrder = 0;

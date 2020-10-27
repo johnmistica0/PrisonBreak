@@ -31,6 +31,7 @@ public class MoveCharacter : MonoBehaviour
         Vector3 pos = transform.position;
         //pos.z = 0;
         //pos.rotation
+
         if (Input.GetKey("w") || Input.GetKey("up"))
         {
             //pos.y += playerSpeed;
@@ -54,6 +55,8 @@ public class MoveCharacter : MonoBehaviour
         }
 
         // transform.position = pos;
+        
+
 
     }
 
@@ -84,7 +87,7 @@ public class MoveCharacter : MonoBehaviour
         }
         else if (coll.gameObject.name == "NPC")
         {
-
+            levelKey = 1;
             UnityEngine.SceneManagement.SceneManager.LoadScene("Level1Scene");
 
         }
