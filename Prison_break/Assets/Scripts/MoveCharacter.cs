@@ -12,10 +12,14 @@ public class MoveCharacter : MonoBehaviour
     //public Transform myPlay;
     private Rigidbody2D body;
     static int levelKey = 1;
+    GameObject inventory;
+    Inventory inventoryScript;
 
     private void Start()
     {
         body = GetComponent<Rigidbody2D>();
+        inventory = GameObject.Find("Invent");
+        inventoryScript = inventory.GetComponent<Inventory>();
         body.freezeRotation = true;
         Vector3 startingPos = new Vector3(1, 1, 0);
         transform.position = startingPos;
@@ -60,8 +64,14 @@ public class MoveCharacter : MonoBehaviour
     {
         if(coll.gameObject.name == "Item")
         {
+
             Debug.Log("Item Obtained");
+            Item item = coll.gameObject.GetComponent<Item>();
+            
+            Debug.Log(item.GetItemType());
+            inventoryScript.addItemToInventory(item);
             Destroy(coll.gameObject);
+            
         }
         else if(coll.gameObject.name == "Door")
         {

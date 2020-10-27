@@ -55,11 +55,10 @@ public class EscapeMenu: MonoBehaviour {
 
     private void setContainer(){
         escMenuContainer = new GameObject("EscapeMenuContainer");
-        escMenuContainer.AddComponent<Canvas>();
+        pauseMenu = escMenuContainer.AddComponent<Canvas>();
         escMenuContainer.AddComponent<CanvasScaler>();
         escMenuContainer.AddComponent<GraphicRaycaster>();
         
-        pauseMenu = escMenuContainer.GetComponent<Canvas>();
         pauseMenu.renderMode = RenderMode.ScreenSpaceCamera;
         pauseMenu.worldCamera = GameObject.Find("Main Camera").GetComponent<Camera>();
         pauseMenu.sortingOrder = 24;   

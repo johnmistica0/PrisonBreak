@@ -33,7 +33,7 @@ public class GridScript
     private Sprite[] moreTileSprites;
 
 
-
+    private ItemFactory itemFactory;
 
 
     public GridScript(float cs, string path)
@@ -44,7 +44,7 @@ public class GridScript
         createContainers();
         //loads sprites into game
         loadResources();
-
+        itemFactory = new ItemFactory();
         player = createPlayerObject();
 
         for(int i = 0; i < npc.GetLength(0); i++)
@@ -60,14 +60,6 @@ public class GridScript
         }
         //creates invisible walls around the grid
         renderInvisibleWalls();
-
-        //the lines in the loop do not close off the top and right borders of the grid. These two lines basically draw the top and right border
-        //closing it off completing the grid structure.
-        // Debug.DrawLine(GetWorldPositions(0, height), GetWorldPositions(width, height), Color.white, 100f);
-        // Debug.DrawLine(GetWorldPositions(width, 0), GetWorldPositions(width, height), Color.white, 100f);
-
-        //testing the setvalue function
-        // SetValue(4, 2, 69);
 
         // Create Camera
         createCameraObject();
@@ -164,9 +156,6 @@ public class GridScript
         b2d.size = new Vector2(1, 1.5f);
         b2d.isTrigger = true;
 
-        //also adding a polygon collider to make it more smooth
-        //player.AddComponent<PolygonCollider2D>();
-
         //does tranformations on sprites position and scale
         transform.SetParent(null, false);
         transform.localPosition = GetWorldPositions(x, y);
@@ -260,7 +249,7 @@ public class GridScript
             transform2.localPosition = GetWorldPositions(x, y);
             SpriteRenderer spriteRenderer2 = tile2.GetComponent<SpriteRenderer>();
             spriteRenderer2.sprite = Sprite.Create(tex, new Rect(0.0f, 0.0f, tex.width, tex.height), new Vector2(0.5f, 0.5f), 100.0f);
-            spriteRenderer2.sprite = (Sprite)tileSprites[2];
+            spriteRenderer2.sprite = (Sprite) moreTileSprites [0];
             //sorting order so that the item image renders over the grass block
             spriteRenderer.sortingOrder = 1;
             spriteRenderer2.sortingOrder = 0;
@@ -268,11 +257,14 @@ public class GridScript
             //code for the item tile
             spriteRenderer.sprite = (Sprite) itemSprites[14];
             tile.AddComponent<BoxCollider2D>();
+            
             BoxCollider2D b2d = tile.GetComponent<BoxCollider2D>();
+            Item item = tile.AddComponent<Item>();
+            item.SetItemType((itemFactory.generateRandomItem()));
             tile.gameObject.name = "Item";
+            
             b2d.isTrigger = true;
         }else if(type == 3){//"door" tiles
-
             GameObject tile2 = new GameObject(x + "," + y, typeof(SpriteRenderer));
             Transform transform2 = tile2.transform;
             transform2.SetParent(itemsContainer.transform, false);
@@ -287,7 +279,6 @@ public class GridScript
 
 
             transform.SetParent(doorsContainer.transform, false);
-            //spriteRenderer.color = new Color(255, 234, 0, 1.0f);
             spriteRenderer.sprite = (Sprite)doorSprites[2];
             tile.AddComponent<BoxCollider2D>();
             BoxCollider2D b2d = tile.GetComponent<BoxCollider2D>();
