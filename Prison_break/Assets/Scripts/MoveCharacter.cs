@@ -14,6 +14,7 @@ public class MoveCharacter : MonoBehaviour
     static int levelKey = 1;
     GameObject inventory;
     Inventory inventoryScript;
+    public static bool usedKey = true;
 
     private void Start()
     {
@@ -29,33 +30,40 @@ public class MoveCharacter : MonoBehaviour
     void Update()
     {
         Vector3 pos = transform.position;
-        //pos.z = 0;
-        //pos.rotation
 
         if (Input.GetKey("w") || Input.GetKey("up"))
         {
-            //pos.y += playerSpeed;
             body.MovePosition(new Vector2(pos.x, pos.y + playerSpeed));
         }
         if (Input.GetKey("a") || Input.GetKey("left"))
         {
-            //pos.x -= playerSpeed;
             body.MovePosition(new Vector2(pos.x - playerSpeed, pos.y));
         }
         if (Input.GetKey("s") || Input.GetKey("down"))
         {
-            
-            //pos.y -= playerSpeed;
             body.MovePosition(new Vector2(pos.x, pos.y - playerSpeed));
         }
         if (Input.GetKey("d") || Input.GetKey("right"))
         {
-            //pos.x += playerSpeed;
             body.MovePosition(new Vector2(pos.x + playerSpeed, pos.y));
         }
+        if (Input.GetKey("w") && Input.GetKey("a"))
+        {
+            body.MovePosition(new Vector2(pos.x - playerSpeed, pos.y + playerSpeed));
+        }
+        if (Input.GetKey("w") && Input.GetKey("d"))
+        {
+            body.MovePosition(new Vector2(pos.x + playerSpeed, pos.y + playerSpeed));
+        }
+        if (Input.GetKey("s") && Input.GetKey("a"))
+        {
+            body.MovePosition(new Vector2(pos.x - playerSpeed, pos.y - playerSpeed));
+        }
+        if (Input.GetKey("s") && Input.GetKey("d"))
+        {
+            body.MovePosition(new Vector2(pos.x + playerSpeed, pos.y - playerSpeed));
+        }
 
-        // transform.position = pos;
-        
 
 
     }
@@ -78,11 +86,18 @@ public class MoveCharacter : MonoBehaviour
         }
         else if(coll.gameObject.name == "Door")
         {
-            
-            levelKey++;
-            string sceneString = "Level" + levelKey.ToString() + "Scene";
-            Debug.Log(levelKey);
-            UnityEngine.SceneManagement.SceneManager.LoadScene(sceneName: sceneString);
+            if(usedKey == true)
+            {
+                levelKey++;
+                string sceneString = "Level" + levelKey.ToString() + "Scene";
+                Debug.Log(levelKey);
+                UnityEngine.SceneManagement.SceneManager.LoadScene(sceneName: sceneString);
+                GameObject door = GameObject.Find("Door");
+            }
+            else
+            {
+                print("Dont have key");
+            }
             
         }
         else if (coll.gameObject.name == "NPC")

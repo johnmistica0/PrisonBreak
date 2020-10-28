@@ -27,12 +27,13 @@ public class GridScript
     private GameObject[] npc;
     private int NPCnum;
     private int[] NPClocation;
+    private int itemsCreated = 0;
     private Sprite[] itemSprites;
     private Sprite [] tileSprites;
     private Sprite[] doorSprites;
     private Sprite [] playerSprites;
     private Sprite[] moreTileSprites;
-
+    private Dictionary<string, int> items = new Dictionary<string, int>();
 
     private ItemFactory itemFactory;
 
@@ -67,6 +68,7 @@ public class GridScript
     }
     private void loadResources(){
         itemSprites = Resources.LoadAll<Sprite>("Items");
+
         tileSprites = Resources.LoadAll<Sprite>("Tiles");
         doorSprites = Resources.LoadAll<Sprite>("Door");
         playerSprites  = Resources.LoadAll<Sprite>("prison");
@@ -152,7 +154,7 @@ public class GridScript
         npc.AddComponent<GuardPathing>();
         npc.GetComponent<GuardPathing>().player = player;
         npc.AddComponent<NavMeshAgent>();
-        
+
         //Add a collider component to the player to detect collisions with walls, items, etc
         npc.AddComponent<BoxCollider2D>();
         //set it to a variable to modify it
@@ -198,7 +200,7 @@ public class GridScript
             transform1.SetParent(invisibleWallContainer.transform, false);
             transform2.SetParent(invisibleWallContainer.transform, false);
             transform1.localPosition = GetWorldPositions(i, -1);
-            transform2.localPosition = GetWorldPositions(i, width);
+            transform2.localPosition = GetWorldPositions(i, height);
         }
         for(int i = 0; i < height; i++){
             GameObject invWall1 = new GameObject(-1 + ","+ i,typeof(BoxCollider2D)); 
@@ -208,7 +210,7 @@ public class GridScript
             transform1.SetParent(invisibleWallContainer.transform, false);
             transform2.SetParent(invisibleWallContainer.transform, false);
             transform1.localPosition = GetWorldPositions( -1, i);
-            transform2.localPosition = GetWorldPositions( height, i);
+            transform2.localPosition = GetWorldPositions( width, i);
         }
 
         
@@ -245,7 +247,6 @@ public class GridScript
             
         }else if(type == 2){//item tiles
 
-
             //Adding a duplicate layer beneath it, so that when collision for the item is detected,
             //we simply destroy that game object, revealing the default tile beneath
             GameObject tile2 = new GameObject(x + "," + y, typeof(SpriteRenderer));
@@ -261,16 +262,44 @@ public class GridScript
             spriteRenderer2.sortingOrder = 0;
 
             //code for the item tile
-            spriteRenderer.sprite = (Sprite) itemSprites[14];
+            int itemType;
+
+            if(items.TryGetValue(x.ToString() + y.ToString(), out itemType))
+            {
+                spriteRenderer.sprite = (Sprite)itemSprites[itemType];
+            }
+
             tile.AddComponent<BoxCollider2D>();
             
             BoxCollider2D b2d = tile.GetComponent<BoxCollider2D>();
             Item item = tile.AddComponent<Item>();
-            item.SetItemType((itemFactory.generateRandomItem()));
+
+            switch (itemType)
+            {
+                case 0:
+                    item.SetItemType((itemFactory.generateEmpty()));
+                    break;
+                case 1:
+                    item.SetItemType((itemFactory.generateAttackBoost()));
+                    break;
+                case 2:
+                    item.SetItemType((itemFactory.generateSpeedBoost()));
+                    break;
+                case 3:
+                    item.SetItemType((itemFactory.generateStealthBoost()));
+                    break;
+                case 4:
+                    item.SetItemType((itemFactory.generateKey()));
+                    MoveCharacter.usedKey = false;
+                    break;
+            }
             tile.gameObject.name = "Item";
             
             b2d.isTrigger = true;
-        }else if(type == 3){//"door" tiles
+
+            itemsCreated++;
+        }
+        else if(type == 3){//"door" tiles
             GameObject tile2 = new GameObject(x + "," + y, typeof(SpriteRenderer));
             Transform transform2 = tile2.transform;
             transform2.SetParent(itemsContainer.transform, false);
@@ -288,6 +317,7 @@ public class GridScript
             spriteRenderer.sprite = (Sprite)doorSprites[2];
             tile.AddComponent<BoxCollider2D>();
             BoxCollider2D b2d = tile.GetComponent<BoxCollider2D>();
+            b2d.size = new Vector2(1, 1);
             b2d.isTrigger = true;
 
             tile.gameObject.name = "Door";
@@ -338,6 +368,10 @@ public class GridScript
                 {
                     int tileType = int.Parse(list[2]);
                     gridArray[x, y] = tileType;
+                    if(tileType == 2)
+                    {
+                        items.Add(x.ToString() + y.ToString(), int.Parse(list[3]));
+                    }
                 }
                 else
                 {
