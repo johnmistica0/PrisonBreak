@@ -102,9 +102,11 @@ public class MoveCharacter : MonoBehaviour
         }
         else if (coll.gameObject.name == "NPC")
         {
+            /*
             levelKey = 1;
             UnityEngine.SceneManagement.SceneManager.LoadScene("Level1Scene");
-
+            */
+            UnityEngine.SceneManagement.SceneManager.LoadScene("FailureScene");
         }
 
 
