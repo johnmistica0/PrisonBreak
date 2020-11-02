@@ -26,4 +26,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Level6Scene.unity
     guid: 8715b067b4d69974d8c3b41e2d9f46f6
+  - enabled: 1
+    path: Assets/Scenes/TextFieldDemo.unity
+    guid: 1a812fdd2fcad4d58ad2b0b57d52854c
   m_configObjects: {}

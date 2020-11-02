@@ -11,11 +11,11 @@ public class MoveCharacter : MonoBehaviour
     public Vector3 myPos;
     //public Transform myPlay;
     private Rigidbody2D body;
-    static int levelKey = 1;
+    public static int levelKey = 1;
     GameObject inventory;
     Inventory inventoryScript;
     public static bool usedKey = true;
-
+    
     private void Start()
     {
         body = GetComponent<Rigidbody2D>();
@@ -92,21 +92,23 @@ public class MoveCharacter : MonoBehaviour
                 string sceneString = "Level" + levelKey.ToString() + "Scene";
                 Debug.Log(levelKey);
                 UnityEngine.SceneManagement.SceneManager.LoadScene(sceneName: sceneString);
-                GameObject door = GameObject.Find("Door");
             }
             else
             {
                 print("Dont have key");
+                if(TextInput.doorKey.Length > 0)
+                {
+                    UnityEngine.SceneManagement.SceneManager.LoadScene("TextFieldDemo");
+                }
+                
             }
             
         }
         else if (coll.gameObject.name == "NPC")
         {
-            /*
             levelKey = 1;
             UnityEngine.SceneManagement.SceneManager.LoadScene("Level1Scene");
-            */
-            UnityEngine.SceneManagement.SceneManager.LoadScene("FailureScene");
+            //UnityEngine.SceneManagement.SceneManager.LoadScene("FailureScene");
         }
 
 

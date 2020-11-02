@@ -3,6 +3,9 @@ guid: 7776ed348258a4eb790a5e99f98d9def
 TextureImporter:
   fileIDToRecycleName:
     21300000: Prison_A5_0
+    21300002: Prison_A5_1
+    21300004: Prison_A5_2
+    21300006: Prison_A5_3
   externalObjects: {}
   serializedVersion: 9
   mipmaps:
@@ -78,17 +81,77 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 193
-        y: 624
+        y: 625
         width: 47
         height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
       spriteID: 89ebf2290ca604ca4afc4bfe890ca233
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Prison_A5_1
+      rect:
+        serializedVersion: 2
+        x: 193
+        y: 528
+        width: 47
+        height: 47
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 83ce8eaac11a842738d6603a7b996496
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Prison_A5_2
+      rect:
+        serializedVersion: 2
+        x: 193
+        y: 481
+        width: 47
+        height: 47
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0ae7cfb646dfc44b39254b9243dc5c0b
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Prison_A5_3
+      rect:
+        serializedVersion: 2
+        x: 193
+        y: 433
+        width: 47
+        height: 47
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8ef77fd7aeb48437f9402756a8ad44e4
       vertices: []
       indices: 
       edges: []
