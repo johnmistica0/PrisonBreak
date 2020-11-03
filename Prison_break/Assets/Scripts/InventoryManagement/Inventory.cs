@@ -130,7 +130,6 @@ public class Inventory : MonoBehaviour {
         Vector2 position;
         SpriteRenderer spriteInv;
         Button buttonInv;
-
         SpriteRenderer spriteItem;
         
         //Creates the Sprites and Positions the inventor

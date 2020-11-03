@@ -110,11 +110,6 @@ public class GridScript
         BoxCollider2D b2d = player.GetComponent<BoxCollider2D>();
         //set the size of the colliders
         b2d.size = new Vector2(1, 1.5f);
-
-        //also adding a polygon collider to make it more smooth
-        //player.AddComponent<PolygonCollider2D>();
-
-
         //creates a new spriteRenderer for the player GameObject
         SpriteRenderer spriteRenderer = player.GetComponent<SpriteRenderer>();
         spriteRenderer.sprite = Sprite.Create(tex, new Rect(0.0f, 0.0f, tex.width, tex.height), new Vector2(0.5f, 0.5f), 100.0f);
@@ -164,8 +159,8 @@ public class GridScript
         //creates a new spriteRenderer for the player GameObject
         SpriteRenderer spriteRenderer = npc.GetComponent<SpriteRenderer>();
         spriteRenderer.sprite = Sprite.Create(tex, new Rect(0.0f, 0.0f, tex.width, tex.height), new Vector2(0.5f, 0.5f), 100.0f);
-        //set to 32767(max) - prevents player from clipper under any other sprite
-        spriteRenderer.sortingOrder = 32767;
+        //set to 20 to render menu infront of it 
+        spriteRenderer.sortingOrder = 20;
 
         //sets rb2d gravity to 0
         Rigidbody2D rb2d = npc.GetComponent<Rigidbody2D>();
