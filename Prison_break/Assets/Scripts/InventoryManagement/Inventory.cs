@@ -13,10 +13,10 @@ public class Inventory : MonoBehaviour {
     MoveCharacter movement;
     public enum ItemTypes {
         Empty,
-        SpeedBoost,
         AttackBoost,
+        SpeedBoost,
         StealthBoost,
-
+        Key,
     }
     //Loads item sprites and inventory sprites
     private void loadResources(){
@@ -107,7 +107,7 @@ public class Inventory : MonoBehaviour {
     private void adjustPlayerStats(ItemTypes itemType){
         if(!player){
             player = GameObject.Find("Player");
-            movement = player.GetComponent<MoveCharacter>();    
+            movement = player.GetComponent<MoveCharacter>();
         }
         //maybe implement a timer for each boost
         switch(itemType){
@@ -117,6 +117,10 @@ public class Inventory : MonoBehaviour {
                 movement.playerSpeed = movement.playerSpeed+movement.playerSpeed*0.5F;
                 break;
             case ItemTypes.StealthBoost:
+                break;
+            case ItemTypes.Key:
+                print("used key");
+                MoveCharacter.usedKey = true;
                 break;
 
         }
@@ -175,8 +179,6 @@ public class Inventory : MonoBehaviour {
         public void setItem(Item item){
             this.item = item;
             spriteItem.sprite = (Sprite) itemSprites[(int) item.GetItemType()];
-
-
         }
         public void reset(){
             this.item.SetItemType(ItemTypes.Empty);

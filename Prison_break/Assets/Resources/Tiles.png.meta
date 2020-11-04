@@ -6,7 +6,7 @@ TextureImporter:
     21300002: Floor
     21300004: Brick_Floor
     21300006: Wall
-    21300008: Tiles_0
+    21300008: Tiles_4
     21300010: Brick_Floor
   externalObjects: {}
   serializedVersion: 9
@@ -154,6 +154,26 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 7a0f0cc39f3e9965394c4e73b4b70cb8
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Tiles_4
+      rect:
+        serializedVersion: 2
+        x: 320
+        y: 0
+        width: 67
+        height: 62
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 70cc673757b9a8d46a71dbe422c40474
       vertices: []
       indices: 
       edges: []
