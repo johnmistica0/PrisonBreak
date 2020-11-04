@@ -1,13 +1,21 @@
 fileFormatVersion: 2
 guid: 7776ed348258a4eb790a5e99f98d9def
 TextureImporter:
-  fileIDToRecycleName:
-    21300000: Prison_A5_0
-    21300002: Prison_A5_1
-    21300004: Prison_A5_2
-    21300006: Prison_A5_3
+  internalIDToNameTable:
+  - first:
+      213: 21300000
+    second: Prison_A5_0
+  - first:
+      213: 21300002
+    second: Prison_A5_1
+  - first:
+      213: 21300004
+    second: Prison_A5_2
+  - first:
+      213: 21300006
+    second: Prison_A5_3
   externalObjects: {}
-  serializedVersion: 9
+  serializedVersion: 11
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -61,8 +69,9 @@ TextureImporter:
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
+  applyGammaDecoding: 1
   platformSettings:
-  - serializedVersion: 2
+  - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
     maxTextureSize: 2048
     resizeAlgorithm: 0
@@ -73,6 +82,7 @@ TextureImporter:
     allowsAlphaSplitting: 0
     overridden: 0
     androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 1
   spriteSheet:
     serializedVersion: 2
     sprites:
@@ -92,6 +102,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 89ebf2290ca604ca4afc4bfe890ca233
+      internalID: 21300000
       vertices: []
       indices: 
       edges: []
@@ -112,6 +123,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 83ce8eaac11a842738d6603a7b996496
+      internalID: 21300002
       vertices: []
       indices: 
       edges: []
@@ -132,6 +144,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 0ae7cfb646dfc44b39254b9243dc5c0b
+      internalID: 21300004
       vertices: []
       indices: 
       edges: []
@@ -152,6 +165,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 8ef77fd7aeb48437f9402756a8ad44e4
+      internalID: 21300006
       vertices: []
       indices: 
       edges: []
@@ -160,10 +174,12 @@ TextureImporter:
     physicsShape: []
     bones: []
     spriteID: 59cc11971fd23446cb4e25dd7dfd5a4c
+    internalID: 0
     vertices: []
     indices: 
     edges: []
     weights: []
+    secondaryTextures: []
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

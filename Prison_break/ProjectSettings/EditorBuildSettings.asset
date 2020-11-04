@@ -29,4 +29,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/TextFieldDemo.unity
     guid: 1a812fdd2fcad4d58ad2b0b57d52854c
+  - enabled: 1
+    path: Assets/Scenes/FailureScene.unity
+    guid: 3ef69fc6fa4de4c18aff415d98d09c76
   m_configObjects: {}
