@@ -70,6 +70,7 @@ public class MoveCharacter : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D other) {
         Debug.Log("Hello");
         if(other.gameObject.name == "NPC"){
+            levelKey = 1;
             UnityEngine.SceneManagement.SceneManager.LoadScene("FailureScene");
         }
     }
@@ -94,6 +95,10 @@ public class MoveCharacter : MonoBehaviour
         {
             if(usedKey == true)
             {
+                if (levelKey == 6) {
+                    UnityEngine.SceneManagement.SceneManager.LoadScene("VictoryScene");
+                    return;
+                }
                 levelKey++;
                 string sceneString = "Level" + levelKey.ToString() + "Scene";
                 Debug.Log(levelKey);
