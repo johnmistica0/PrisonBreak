@@ -53,8 +53,8 @@ public class GridScript
 
         player = createPlayerObject();
 
-        for(int i = 0; i < npc.GetLength(0); i++)
-            npc[i] = createNPCObject(NPClocation[i],NPClocation[i+1]);
+        for(int i = 1; i < npc.GetLength(0)+1; i++)
+            npc[i-1] = createNPCObject(NPClocation[i - 1 + (i - 1)],NPClocation[i + (i - 1)]);
 
         for (int i = 0; i < gridArray.GetLength(0); i++)
         {
@@ -152,6 +152,8 @@ public class GridScript
 
     private GameObject createNPCObject(int x, int y)
     {
+        Debug.Log(x);
+        Debug.Log(y);
         Texture2D tex = new Texture2D(100, 100);
         GameObject npc = new GameObject("NPC", typeof(SpriteRenderer));
         Transform transform = npc.transform;
@@ -388,11 +390,8 @@ public class GridScript
                 for(int i = 1; i < NPCnum+1; i++)
                 {
         
-                    NPClocation[i - 1] = int.Parse(list[i + (i-1)]);
-                    NPClocation[i] = int.Parse(list[i + 1 + (i - 1)]);
-
-                    Debug.Log(NPClocation[i-1]);
-                    Debug.Log(NPClocation[i]);
+                    NPClocation[i - 1 + (i - 1)] = int.Parse(list[i + (i - 1)]);
+                    NPClocation[i  + (i - 1)] = int.Parse(list[i + 1 + (i - 1)]);
                 }
 
             }
@@ -411,7 +410,6 @@ public class GridScript
                         items.Add(x.ToString() + y.ToString(), int.Parse(list[3]));
                         if (int.Parse(list[3]) == 4)
                         {
-                            Debug.Log(list[4]);
                             TextInput.doorKey = list[4];
                         }
                         
@@ -419,7 +417,6 @@ public class GridScript
                     if(tileType == 0)
                     {
                         tileColor.Add(x.ToString() + y.ToString(), int.Parse(list[3]));
-                        Debug.Log(int.Parse(list[3]));
                     }
                 }
                 else
