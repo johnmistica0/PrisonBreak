@@ -188,7 +188,7 @@ public class GridScript
         rb2d.interpolation = RigidbodyInterpolation2D.Extrapolate;
         rb2d.angularDrag = 0;
         rb2d.freezeRotation = true;
-        //loads wizard sprite onto player
+        //loads inmate sprite onto player
 
         spriteRenderer.sprite = (Sprite)playerSprites[9];
 
@@ -305,6 +305,7 @@ public class GridScript
 
                 Item item = tile.AddComponent<Item>();
 
+                // Spawn item based on type
                 switch (itemType)
                 {
                     case 0:
@@ -362,6 +363,8 @@ public class GridScript
     private void loadMapFile(string path){
         var reader = new StreamReader(File.OpenRead(path));
         int counter = 0;
+
+        // While there are lines to read
         while(!reader.EndOfStream){
             var line = reader.ReadLine();
             var list = line.Split(',');

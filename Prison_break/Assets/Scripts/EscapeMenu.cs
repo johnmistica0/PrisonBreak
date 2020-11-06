@@ -184,9 +184,4 @@ public class EscapeMenu: MonoBehaviour {
     private void startGame(){
 
     }
-
-    void cool(){
-        Debug.Log("Cool");
-    }
-
 }

@@ -110,12 +110,8 @@ public class MoveCharacter : MonoBehaviour
                 if(TextInput.doorKey.Length > 0)
                 {
                     UnityEngine.SceneManagement.SceneManager.LoadScene("TextFieldDemo");
-                }
-                
-            }
-            
+                }   
+            }   
         }
-
-
     }
 }
